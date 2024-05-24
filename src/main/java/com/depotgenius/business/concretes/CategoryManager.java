@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.depotgenius.business.abstracts.CategoryService;
 import com.depotgenius.dataAccess.CategoryRepository;
+import com.depotgenius.dtos.category.CreateCategoryRequest;
 import com.depotgenius.entities.concretes.Category;
 
 @Service
@@ -16,13 +17,13 @@ public class CategoryManager implements CategoryService{
 	private CategoryRepository categoryRepository;
 
 	@Override
-	public Category Create(Category entity) {
+	public Category create(CreateCategoryRequest entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Category Update(Category entity) {
+	public Category update(Category entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
