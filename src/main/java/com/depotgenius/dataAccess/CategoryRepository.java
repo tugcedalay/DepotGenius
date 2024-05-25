@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import com.depotgenius.entities.concretes.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, UUID>, JpaSpecificationExecutor<Category> {
-      
+    
 	List<Category> findAll();
 	
 	boolean existsByCategoryName(String name);

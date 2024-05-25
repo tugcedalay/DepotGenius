@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Category extends BaseEntity{
     
 	@Column(name = "category_name")
-	private String name;
+	private String categoryName;
 	
 	@OneToMany(mappedBy = "category")
 	private List<Product> products;
