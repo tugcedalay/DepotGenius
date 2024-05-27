@@ -1,14 +1,18 @@
 package com.depotgenius.business.concretes;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.depotgenius.business.abstracts.CategoryService;
+import com.depotgenius.business.rules.category.CategoryBusinessRules;
+import com.depotgenius.core.exceptions.BusinessExceptions;
+import com.depotgenius.core.exceptions.Messages;
+import com.depotgenius.core.mappers.ModelMapperService;
 import com.depotgenius.dataAccess.CategoryRepository;
 import com.depotgenius.dtos.category.CreateCategoryRequest;
-import com.depotgenius.dtos.category.DeleteCategoryRequest;
 import com.depotgenius.dtos.category.UpdateCategoryRequest;
 import com.depotgenius.entities.concretes.Category;
 
@@ -17,29 +21,45 @@ public class CategoryManager implements CategoryService{
     
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private CategoryBusinessRules categoryBusinessRules;
+	
+	@Autowired
+	private ModelMapperService modelMapperService;
 
 	@Override
 	public Category create(CreateCategoryRequest createCategoryRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		categoryBusinessRules.checkIfCategoryNameExists(createCategoryRequest.getCategoryName());
+		Category category = modelMapperService.forRequest().map(createCategoryRequest, Category.class);
+		return categoryRepository.save(category);
 	}
 
 	@Override
 	public Category update(UpdateCategoryRequest updateCategoryRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		Category category = getCategory(updateCategoryRequest.getId());
+		category.setCategoryName(updateCategoryRequest.getCategoryName());
+		categoryBusinessRules.checkIfCategoryNameExists(updateCategoryRequest.getCategoryName());
+		return categoryRepository.save(category);
+	
 	}
 
 	@Override
-	public void delete(DeleteCategoryRequest deleteCategoryRequest) {
-		// TODO Auto-generated method stub
-		
+	public void delete(UUID id) {
+		Category category = getCategory(id);
+		categoryRepository.save(category);
 	}
 
 	@Override
 	public Category getCategory(UUID categoryId) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Category> oCategory = categoryRepository.findById(categoryId);
+		Category category = null;
+		if (oCategory.isPresent()) {
+			category = oCategory.get();
+		} else {
+			throw new BusinessExceptions(Messages.CATEGORY_ID_NOT_FOUND);
+		}
+		return category;
 	}
 
 
