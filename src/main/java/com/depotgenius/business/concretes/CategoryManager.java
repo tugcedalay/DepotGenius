@@ -1,5 +1,6 @@
 package com.depotgenius.business.concretes;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import com.depotgenius.core.exceptions.Messages;
 import com.depotgenius.core.mappers.ModelMapperService;
 import com.depotgenius.dataAccess.CategoryRepository;
 import com.depotgenius.dtos.category.CreateCategoryRequest;
+import com.depotgenius.dtos.category.GetAllCategoryResponse;
 import com.depotgenius.dtos.category.UpdateCategoryRequest;
 import com.depotgenius.entities.concretes.Category;
 
@@ -37,9 +39,9 @@ public class CategoryManager implements CategoryService{
 
 	@Override
 	public Category update(UpdateCategoryRequest updateCategoryRequest) {
+		categoryBusinessRules.checkIfCategoryNameExists(updateCategoryRequest.getCategoryName());
 		Category category = getCategory(updateCategoryRequest.getId());
 		category.setCategoryName(updateCategoryRequest.getCategoryName());
-		categoryBusinessRules.checkIfCategoryNameExists(updateCategoryRequest.getCategoryName());
 		return categoryRepository.save(category);
 	
 	}
@@ -50,7 +52,7 @@ public class CategoryManager implements CategoryService{
 		categoryRepository.save(category);
 	}
 
-	@Override
+    @Override
 	public Category getCategory(UUID categoryId) {
 		Optional<Category> oCategory = categoryRepository.findById(categoryId);
 		Category category = null;
@@ -61,6 +63,14 @@ public class CategoryManager implements CategoryService{
 		}
 		return category;
 	}
-
+    @Override
+    public List<GetAllCategoryResponse> getAll() {
+    	List<Category> categories = categoryRepository.findAll();
+    	if(categories == null)
+    		throw new BusinessExceptions(Messages.CATEGORY_IS_NOT_AVAILABLE);
+    	List<GetAllCategoryResponse> response =  categories.stream()
+    			.map(category -> modelMapperService.forResponse().map(category, GetAllCategoryResponse.class)).toList();
+    	return response;
+    }
 
 }

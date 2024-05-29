@@ -17,4 +17,6 @@ public record Messages() {
 	
 	public static final String SUCCESSFULLY = "Successfully";
 	
+	public static final String CATEGORY_IS_NOT_AVAILABLE = "category is not available";
+	
 }

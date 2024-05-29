@@ -18,8 +18,5 @@ public interface CategoryService {
 	
 	Category getCategory (UUID categoryId);
 
-	static List<GetAllCategoryResponse> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	List<GetAllCategoryResponse> getAll();
 }

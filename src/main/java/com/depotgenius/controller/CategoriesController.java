@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.depotgenius.business.abstracts.CategoryService;
-import com.depotgenius.core.mappers.ModelMapperService;
 import com.depotgenius.dtos.SuccessResponse;
 import com.depotgenius.dtos.category.CreateCategoryRequest;
 import com.depotgenius.dtos.category.GetAllCategoryResponse;
@@ -26,8 +25,6 @@ public class CategoriesController {
     
 	@Autowired
 	private CategoryService categoryService;
-	@Autowired
-	private ModelMapperService modelMapperService;
 	
 	@PostMapping("/create")
 	public SuccessResponse create(@Valid @RequestBody CreateCategoryRequest request) {
@@ -50,10 +47,8 @@ public class CategoriesController {
 	
 	@GetMapping("/getall")
 	public List<GetAllCategoryResponse> getAll(){
-    	return CategoryService.getAll();
-	   
-	}
-
+    	return categoryService.getAll();
+    	}
 	
 }
 
